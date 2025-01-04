@@ -1,0 +1,42 @@
+.view__home {
+  padding: 20px;
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px; // 网格间距
+  }
+
+  .tools-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    cursor: pointer;
+    .tools-item-icon {
+      margin-bottom: 8px;
+      font-size: 20px;
+      color: #333;
+    }
+    .tools-item-name {
+      font-size: 12px;
+      color: #333;
+    }
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+      background: #f0f0f0;
+    }
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+tauri 2.0 使用指南
+1. 安装依赖
+cargo install create-tauri-app --locked
+2. 创建项目
+cargo create-tauri-app
+✔ Project name · rust_tools
+✔ Identifier · com.rust_tools.app
+✔ Choose which language to use for your frontend · TypeScript / JavaScript - (pnpm, yarn, npm, deno, bun)
+✔ Choose your package manager · pnpm
+✔ Choose your UI template · React - (https://react.dev/)
+✔ Choose your UI flavor · TypeScript
+Template created! To get started run:
+  cd rust_tools
+  pnpm install
+  pnpm tauri android init
+
+For Desktop development, run:
+  pnpm tauri dev
+
+For Android development, run:
+  pnpm tauri android dev
+
+
+rust/cargo 使用指南
+1. 添加依赖包
+cargo add xxx
