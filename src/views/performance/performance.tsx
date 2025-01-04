@@ -18,10 +18,27 @@ function PerformanceInfo() {
     const res = await invoke('get_system_info').catch(() => ({})) as Record<string, string | number>;
     const list = [];
     for(const key in res) {
-      list.push({
-        prop: key,
-        value: res[key]
-      })
+      if(Array.isArray(res[key])) {
+        let str = '';
+        for(const item of res[key]) {
+          if(str) {
+            str += '|-----------|';
+          }
+          for(const itemKey in item) {
+            str += `${itemKey}: ${item[itemKey]}, `;
+          }
+        }
+        list.push({
+          prop: key,
+          value: str
+        });
+      } else {
+        list.push({
+          prop: key,
+          value: res[key]
+        });
+      }
+      
     }
     setSystemInfo(list);
   }
@@ -29,7 +46,7 @@ function PerformanceInfo() {
   return <div className="view__performance">
     <div>
       {systemInfo.map(item => (
-        <div>
+        <div key={item.prop}>
           <span>{item.prop}</span>
           <span>{item.value}</span>
         </div>

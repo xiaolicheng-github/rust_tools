@@ -19,6 +19,10 @@ For Desktop development, run:
 
 For Android development, run:
   pnpm tauri android dev
+3. tauri cli
+cargo install tauri-cli --version "^2.0.0" --locked
+4. 构建
+cargo tauri build
 
 
 rust/cargo 使用指南
