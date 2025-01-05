@@ -1,8 +1,8 @@
 @font-face {
   font-family: "icon-class"; /* Project id 4326528 */
-  src: url('iconfont.woff2?t=1735975641626') format('woff2'),
-       url('iconfont.woff?t=1735975641626') format('woff'),
-       url('iconfont.ttf?t=1735975641626') format('truetype');
+  src: url('iconfont.woff2?t=1736064914275') format('woff2'),
+       url('iconfont.woff?t=1736064914275') format('woff'),
+       url('iconfont.ttf?t=1736064914275') format('truetype');
 }
 
 .icon-class {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-net:before {
+  content: "\e60b";
 }
 
 .icon-zhuji:before {

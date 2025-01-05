@@ -2,6 +2,7 @@ import { Route, HashRouter as Router, Routes} from "react-router-dom";
 import { EToolId } from "./tools";
 import Home from './views/home/home';
 import PerformanceInfo from "./views/performance/performance";
+import Network from "./views/network/network";
 import './assets/iconfont/iconfont.css';
 import "./App.scss";
 
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path={`/${EToolId.Performance}`} element={<PerformanceInfo />} />
+            <Route path={`/${EToolId.Network}`} element={<Network />} />
           </Routes>
         </Router>
       </div>

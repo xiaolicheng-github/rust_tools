@@ -1,6 +1,6 @@
 export enum EToolId {
   Performance = 'performance-info',
-  Internet = 'internet'
+  Network = 'network'
 }
 export interface IToolsItem {
   id: EToolId | string;
@@ -14,23 +14,8 @@ export const tools: IToolsItem[] = [
     icon: 'icon-zhuji',
   },
   {
-    id: EToolId.Internet,
+    id: EToolId.Network,
     name: '网络',
-  },
-  {
-    id: 'test',
-    name: '网络'
-  },
-  {
-    id: 'test1',
-    name: 'test1'
-  },
-  {
-    id: 'test2',
-    name: 'test2'
-  },
-  {
-    id: 'test3',
-    name: 'test3'
+    icon: 'icon-net'
   }
 ];
