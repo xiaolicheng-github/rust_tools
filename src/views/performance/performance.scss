@@ -1,0 +1,50 @@
+.view__performance {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  background: #f9f9f9; // 浅色背景
+  color: #333333; // 字体颜色
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+
+  .info-list-wrap {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+
+    .info-list-item {
+      display: table-row;
+
+      &:nth-child(odd) {
+        background-color: #ffffff; // 浅色交替背景
+      }
+
+      &:nth-child(even) {
+        background-color: #f0f0f0; // 更浅的背景
+      }
+
+      &:hover {
+        background-color: #e0e0e0; // 高亮
+      }
+
+      .item-prop {
+        display: table-cell;
+        padding: 12px 16px;
+        font-weight: 600;
+        color: #007acc; // 属性名称颜色
+        width: 30%; // 固定宽度
+        text-align: right; // 属性名对齐
+        border-right: 1px solid #ddd; // 分隔线
+      }
+
+      .item-value {
+        display: table-cell;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        color: #555555; // 值的颜色
+        word-wrap: break-word;
+        text-align: left;
+      }
+    }
+  }
+}

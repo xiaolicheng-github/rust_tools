@@ -1,10 +1,11 @@
 .view__home {
-  padding: 20px;
+  height: 100%;
 
   .tools {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 16px; // 网格间距
+    padding: 20px;
   }
 
   .tools-item {
@@ -38,5 +39,15 @@
       transform: translateY(0);
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+  }
+  .bottom-info {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 12px;
+    color: #00000057;
   }
 }

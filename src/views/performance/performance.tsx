@@ -1,11 +1,16 @@
 import { invoke } from '@tauri-apps/api/core';
 import { useEffect, useRef, useState } from 'react';
+import './performance.scss';
 
+interface ISystemInfoItem {
+  prop: string;
+  value: Partial<string | number | Array<string>>
+}
 
 function PerformanceInfo() {
 
   const isInit = useRef(true);
-  const [systemInfo, setSystemInfo] = useState<{ prop: string, value: string | number }[]>([]);
+  const [systemInfo, setSystemInfo] = useState<ISystemInfoItem[]>([]);
 
   useEffect(() => {
     if(isInit.current) {
@@ -19,18 +24,19 @@ function PerformanceInfo() {
     const list = [];
     for(const key in res) {
       if(Array.isArray(res[key])) {
-        let str = '';
+        const values = [];
+        let index = 0;
         for(const item of res[key]) {
-          if(str) {
-            str += '|-----------|';
-          }
+          let str = '';
+          index += 1;
           for(const itemKey in item) {
-            str += `${itemKey}: ${item[itemKey]}, `;
+            str += `${itemKey}: ${item[itemKey] || '--'}, `;
           }
+          values.push(str);
         }
         list.push({
           prop: key,
-          value: str
+          value: values
         });
       } else {
         list.push({
@@ -44,11 +50,13 @@ function PerformanceInfo() {
   }
 
   return <div className="view__performance">
-    <div>
+    <div className='info-list-wrap'>
       {systemInfo.map(item => (
-        <div key={item.prop}>
-          <span>{item.prop}</span>
-          <span>{item.value}</span>
+        <div key={item.prop} className='info-list-item'>
+          <span className='item-prop'>{item.prop}</span>
+          <span className='item-value'>{Array.isArray(item.value) ? item.value.map((v, vIndex) => (
+            <div key={`${v}_${vIndex}`}>{v}</div>
+          )) : item.value}</span>
         </div>
       ))}
     </div>

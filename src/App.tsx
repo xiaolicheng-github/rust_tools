@@ -23,12 +23,14 @@ function App() {
           <span className="icon-class icon-home"></span>
         </div>
       </div>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={`/${EToolId.Performance}`} element={<PerformanceInfo />} />
-        </Routes>
-      </Router>
+      <div className="app-root-content">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path={`/${EToolId.Performance}`} element={<PerformanceInfo />} />
+          </Routes>
+        </Router>
+      </div>
     </div>
   );
 }

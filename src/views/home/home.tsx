@@ -21,6 +21,9 @@ function Home() {
         ))
       }
     </div>
+    <div className="bottom-info">
+      Made by https://github.com/xiaolicheng-github/rust_tools
+    </div>
   </div>
 }
 export default Home;
