@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './performance.scss';
 
 interface ISystemInfoItem {
@@ -9,14 +9,10 @@ interface ISystemInfoItem {
 
 function PerformanceInfo() {
 
-  const isInit = useRef(true);
   const [systemInfo, setSystemInfo] = useState<ISystemInfoItem[]>([]);
 
   useEffect(() => {
-    if(isInit.current) {
-      getSystemInfo();
-      isInit.current = false;
-    }
+    getSystemInfo();
   }, []);
 
   async function getSystemInfo() {

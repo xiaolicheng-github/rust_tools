@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 import './network.scss';
@@ -14,7 +14,6 @@ function bytesToMB(bytes: number) {
 
 function Network() {
 
-  const isInit = useRef(true);
   const chartRef = useRef(null);
   const chartInstance = useRef<echarts.ECharts | null>(null);
   const series = useRef([
@@ -68,33 +67,46 @@ function Network() {
   const setIntervalInstance = useRef<number>(0);
   const preCache = useRef({
     received: -1,
-    transmitted: -1
-  })
+    transmitted: -1,
+    time: 0,
+  });
+  const [receivedCount, setReceivedCount] = useState(0);
+  const [transmittedCount, setTransmittedCount] = useState(0);
 
   useEffect(() => {
-    if(isInit.current) {
-      chartInstance.current = echarts.init(chartRef.current);
-      setChartData();
-      setIntervalInstance.current = setInterval(() => {
-        getNetReceivedTransmitted();
-      }, 1000);
-      isInit.current = false;
+    chartInstance.current = echarts.init(chartRef.current);
+    setChartData();
+    setIntervalInstance.current = setInterval(() => {
+      getNetReceivedTransmitted();
+    }, 1000);
+    return () => {
+      clearInterval(setIntervalInstance.current);
+      chartInstance.current = null;
+      preCache.current = {
+        received: -1,
+        transmitted: -1,
+        time: 0,
+      };
     }
   }, []);
 
   async function getNetReceivedTransmitted() {
     const res = await invoke('get_net_received_transmitted').catch(() => ({})) as any;
-    console.log(res);
     const received = res.received[0];
     const transmitted = res.transmitted[0];
     const timeDate = dayjs();
     let receivedSpeed = 0;
     let transmittedSpeed = 0;
+    const timeDiff = (dayjs().valueOf() - preCache.current.time) / 1000;
     if(preCache.current.received >= 0) {
-      receivedSpeed = bytesToMB(received - preCache.current.received);
+      receivedSpeed = bytesToMB((received - preCache.current.received) / timeDiff);
+      const diff = received - preCache.current.received;
+      setReceivedCount(n => n + diff);
     }
     if(preCache.current.transmitted >= 0) {
-      transmittedSpeed = bytesToMB(transmitted - preCache.current.transmitted);
+      transmittedSpeed = bytesToMB((transmitted - preCache.current.transmitted) / timeDiff);
+      const diff = transmitted - preCache.current.transmitted;
+      setTransmittedCount(n => n + diff);
     }
     if(series.current[0].data.length >= 3600) {
       series.current[0].data.splice(0, 1);
@@ -118,6 +130,7 @@ function Network() {
     });
     preCache.current.received = received;
     preCache.current.transmitted = transmitted;
+    preCache.current.time = dayjs().valueOf();
     setChartData();
   }
 
@@ -130,6 +143,14 @@ function Network() {
 
   return <div className="view__network">
     <div className="main-chart" ref={chartRef}></div>
+    <div>
+      <span>下载总量：</span>
+      <span>{`${bytesToMB(receivedCount)} MB`}</span>
+    </div>
+    <div>
+      <span>上传总量：</span>
+      <span>{`${bytesToMB(transmittedCount)} MB`}</span>
+    </div>
   </div>
 }
 
