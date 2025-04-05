@@ -1,6 +1,7 @@
 export enum EToolId {
   Performance = 'performance-info',
-  Network = 'network'
+  Network = 'network',
+  Service = 'service'
 }
 export interface IToolsItem {
   id: EToolId | string;
@@ -16,6 +17,11 @@ export const tools: IToolsItem[] = [
   {
     id: EToolId.Network,
     name: '网络',
+    icon: 'icon-net'
+  },
+  {
+    id: EToolId.Service,
+    name: '服务',
     icon: 'icon-net'
   }
 ];

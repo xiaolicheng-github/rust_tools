@@ -28,3 +28,13 @@ cargo tauri build
 rust/cargo 使用指南
 1. 添加依赖包
 cargo add xxx
+
+
+
+
+
+rust版本
+rustc 1.81.0
+cargo 1.81.0
+node版本
+v20.18.0

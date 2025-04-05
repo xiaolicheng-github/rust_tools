@@ -3,6 +3,7 @@ import { EToolId } from "./tools";
 import Home from './views/home/home';
 import PerformanceInfo from "./views/performance/performance";
 import Network from "./views/network/network";
+import Service from "./views/service/service";
 import './assets/iconfont/iconfont.css';
 import "./App.scss";
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path={`/${EToolId.Performance}`} element={<PerformanceInfo />} />
             <Route path={`/${EToolId.Network}`} element={<Network />} />
+            <Route path={`/${EToolId.Service}`} element={<Service />} />
           </Routes>
         </Router>
       </div>
