@@ -36,7 +36,6 @@ async fn stop_http_service(state: tauri::State<'_, AppState>) -> Result<String, 
     let service_opt = state.http_service.lock()
         .map_err(|e| format!("状态锁获取失败: {}", e))?
         .take();
-    println!("fasdfsadf");
     match service_opt {
         Some(mut service) => Ok(service.stop().await),
         None => Ok("HTTP服务未运行".to_string())

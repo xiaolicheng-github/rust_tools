@@ -31,6 +31,24 @@ impl HttpService {
     }
 
     pub async fn start(&mut self) -> String {
+        // 修正资源路径获取逻辑
+        let resource_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            // .join("src-tauri")
+            .join("static\\index.html");
+
+        // 添加路径调试日志
+        println!("尝试加载模板路径: {}", resource_path.display());
+        
+        let html_content = fs::read_to_string(&resource_path)
+            .unwrap_or_else(|e| {
+                eprintln!("文件加载失败: {} ({})", resource_path.display(), e);
+                format!(
+                    "<p id='port-info'>服务运行中（端口: {}）</p>",
+                    self.port
+                )
+            })
+            .replace("<p id=\"port-info\">", &format!("<p id=\"port-info\">端口: {}", self.port));
+        
         if self.shutdown_tx.is_some() {
             return format!("HTTP服务已在端口 {} 运行", self.port);
         }
@@ -38,11 +56,11 @@ impl HttpService {
         let (shutdown_tx, shutdown_rx) = tokio::sync::oneshot::channel();
         self.shutdown_tx = Some(shutdown_tx);
         
-        let port = self.port;
-        let html_content = fs::read_to_string("static/index.html")
-            .expect("无法读取HTML文件")
-            .replace("<p id=\"port-info\">当前服务运行正常，端口: </p>", 
-                &format!("<p id=\"port-info\">当前服务运行正常，端口: {}</p>", port));
+        // let port = self.port;
+        // let html_content = fs::read_to_string("static/index.html")
+        //     .expect("无法读取HTML文件")
+        //     .replace("<p id=\"port-info\">当前服务运行正常，端口: </p>", 
+        //         &format!("<p id=\"port-info\">当前服务运行正常，端口: {}</p>", port));
 
         let html_content = Arc::new(html_content);
         let app = Router::new().route("/", get(move || {
