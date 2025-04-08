@@ -30,5 +30,6 @@ sysinfo = "0.33.1"
 axum = "0.8.3"
 tokio = { version = "1.44.1", features = ["rt-multi-thread", "macros", "sync"] }
 hyper = "1.6.0"
+rust-embed = "8.6.0"
 
 

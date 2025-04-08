@@ -1,26 +1,17 @@
 use std::sync::Arc;
 use axum::{Router, routing::get, response::Html};
-use std::{net::SocketAddr, fs};
-use tokio::sync::oneshot::Sender;  // 移除标准库的mpsc导入，保留tokio版本
+use std::net::SocketAddr;
+use tokio::sync::oneshot::Sender;
+use rust_embed::Embed;
 
-// 移除 Clone 自动派生
+#[derive(Embed)]
+#[folder = "static/"]
+struct Asset;
+
 pub struct HttpService {
     port: u16,
     shutdown_tx: Option<Sender<()>>,
 }
-
-// 手动实现 Clone
-impl Clone for HttpService {
-    fn clone(&self) -> Self {
-        Self {
-            port: self.port,
-            shutdown_tx: None, // 明确不克隆通道
-        }
-    }
-}
-
-// 明确实现Send保证线程安全
-unsafe impl Send for HttpService {}
 
 impl HttpService {
     pub fn new(port: u16) -> Self {
@@ -31,23 +22,22 @@ impl HttpService {
     }
 
     pub async fn start(&mut self) -> String {
-        // 修正资源路径获取逻辑
-        let resource_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            // .join("src-tauri")
-            .join("static\\index.html");
-
-        // 添加路径调试日志
-        println!("尝试加载模板路径: {}", resource_path.display());
-        
-        let html_content = fs::read_to_string(&resource_path)
-            .unwrap_or_else(|e| {
-                eprintln!("文件加载失败: {} ({})", resource_path.display(), e);
-                format!(
-                    "<p id='port-info'>服务运行中（端口: {}）</p>",
-                    self.port
-                )
-            })
-            .replace("<p id=\"port-info\">", &format!("<p id=\"port-info\">端口: {}", self.port));
+        // 使用 rust-embed 获取文件内容
+        let html_content = match Asset::get("index.html") {
+            Some(file) => {
+                match std::str::from_utf8(&file.data) {
+                    Ok(content) => content.to_string(),
+                    Err(e) => {
+                        eprintln!("文件解码失败: {}", e);
+                        return format!("HTTP服务启动失败: 无法解码模板文件 ({})", e);
+                    }
+                }
+            },
+            None => {
+                eprintln!("文件加载失败: 未找到 index.html");
+                return format!("HTTP服务启动失败: 未找到模板文件");
+            }
+        }.replace("<p id=\"port-info\">", &format!("<p id=\"port-info\">端口: {}", self.port));
         
         if self.shutdown_tx.is_some() {
             return format!("HTTP服务已在端口 {} 运行", self.port);
@@ -71,7 +61,6 @@ impl HttpService {
         let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
         let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
 
-        // 修复服务器启动逻辑（移除重复的axum::serve调用）
         let server = axum::serve(listener, app)
             .with_graceful_shutdown(async {
                 let _ = shutdown_rx.await;
